@@ -27,7 +27,7 @@ public class CommandLineOptions {
 		cliopt.addOption("p", "port", true, "MongoDB port");
 		cliopt.addOption("u", "user", true, "MongoDB username");
 		cliopt.addOption("pwd", "password", true, "MongoDB password");
-		cliopt.addOption("i", "input file", true, "SQL input file");
+		cliopt.addOption("i", "input", true, "SQL input file");
 
 		CommandLine cmd = parser.parse(cliopt, args);
 
