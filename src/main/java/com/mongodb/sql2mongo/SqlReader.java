@@ -1,6 +1,5 @@
 package com.mongodb.sql2mongo;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -12,12 +11,9 @@ import org.slf4j.LoggerFactory;
 public class SqlReader {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private Pattern sqlPattern = Pattern.compile("INSERT INTO (([\\w\\d]+?)\\.){0,1}([\\w\\d]*?) \\((.*?)\\) VALUES \\((.*)\\);*", Pattern.CASE_INSENSITIVE);
-	private Pattern datePattern = Pattern.compile("to_date\\(['\"](.*?)['\"],['\"](.*?)['\"]\\)");
 	private Pattern stringPattern = Pattern.compile("['\"](.*?)['\"]");
 	private Pattern floatPattern = Pattern.compile("\\d+\\.\\d+");
 	private Pattern booleanPattern = Pattern.compile("(true|false)", Pattern.CASE_INSENSITIVE);
-	private DateTimeFormatter dtf;
-	private String currentDateFormat;
 
 	public Record parse(String line) {
 		Record rec = null;
@@ -108,41 +104,7 @@ public class SqlReader {
 			return Double.parseDouble(value);
 		}
 
-		// matcher = datePattern.matcher(value);
-		// if (matcher.matches()) {
-		// String dateValue = matcher.group(1);
-		// String dtFormat = convertOracleDateFormat(matcher.group(2));
-		//
-		// if (!dtFormat.equals(currentDateFormat)) {
-		// dtf = DateTimeFormatter.ofPattern(dtFormat);
-		// currentDateFormat = dtFormat;
-		// }
-		// logger.info("example date format: {}",
-		// LocalDateTime.now().format(dtf));
-		// return dtf.parse(dateValue);
-		// }
-
 		return Integer.parseInt(value);
-	}
-
-	private String convertOracleDateFormat(String oracleDf) {
-		// 02-DEC-14 09.25.41.858956000','DD-MON-RR HH24.MI.SS.FF'
-
-		String df = oracleDf;
-		df = df.replace('"', '\'');
-		df = df.replace("MONTH", "MMMM");
-		df = df.replace("MON", "MMM");
-		df = df.replace("RRRR", "yyyy");
-		df = df.replace("RR", "yy");
-		df = df.replace("DY", "E");
-		df = df.replace("DD", "dd");
-		df = df.replace("HH24", "HH");
-		df = df.replace("HH12", "hh");
-		df = df.replace("MI", "mm");
-		df = df.replace("SS", "ss");
-		df = df.replace("FF", "n");
-
-		return df;
 	}
 
 }
